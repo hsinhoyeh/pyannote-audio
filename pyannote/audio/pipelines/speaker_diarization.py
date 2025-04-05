@@ -47,6 +47,16 @@ from pyannote.audio.pipelines.utils import (
 )
 from pyannote.audio.utils.signal import binarize
 
+import logging
+import sys
+import time
+
+# Create logger
+logger = logging.getLogger("speakerdiarization")
+logger.setLevel(logging.INFO)
+
+# Create formatter
+formatter = logging.Formatter('PID:%(process)d - %(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 def batchify(iterable, batch_size: int = 32, fillvalue=None):
     """Batchify iterable"""
@@ -337,6 +347,7 @@ class SpeakerDiarization(SpeakerDiarizationMixin, Pipeline):
             hook("embeddings", None, total=batch_count, completed=0)
 
         for i, batch in enumerate(batches, 1):
+            logger.info("batch: {i} starts")
             waveforms, masks = zip(*filter(lambda b: b[0] is not None, batch))
 
             waveform_batch = torch.vstack(waveforms)
@@ -354,6 +365,7 @@ class SpeakerDiarization(SpeakerDiarizationMixin, Pipeline):
 
             if hook is not None:
                 hook("embeddings", embedding_batch, total=batch_count, completed=i)
+            logger.info("batch: {i} ends")
 
         embedding_batches = np.vstack(embedding_batches)
 
