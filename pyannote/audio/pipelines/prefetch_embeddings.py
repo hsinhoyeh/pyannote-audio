@@ -2,11 +2,14 @@
 
 import math
 import numpy as np
+import logging
 import torch
 
 from pyannote.audio.pipelines.speaker_diarization import batchify
 from pyannote.core import SlidingWindowFeature
 from typing import Callable, Optional
+
+logger = logging.getLogger(__name__)
 
 
 def get_embeddings(
