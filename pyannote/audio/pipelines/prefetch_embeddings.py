@@ -1,6 +1,7 @@
 # pyannote/audio/pipelines/prefetch_embeddings.py
 
 import math
+import numpy as np
 from pyannote.core import SlidingWindowFeature
 from typing import Callable, Optional
 
