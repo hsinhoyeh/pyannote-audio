@@ -1,5 +1,7 @@
 # pyannote/audio/pipelines/prefetch_embeddings.py
 
+from pyannote.core import SlidingWindowFeature
+
 def get_embeddings(
     self,
     file,
