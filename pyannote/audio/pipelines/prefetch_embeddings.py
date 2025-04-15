@@ -3,7 +3,7 @@
 import math
 import numpy as np
 
-from pyannote.audio.pipelines.speaker_diarization import batchify, iter_waveform_and_mask
+from pyannote.audio.pipelines.speaker_diarization import batchify
 from pyannote.core import SlidingWindowFeature
 from typing import Callable, Optional
 
@@ -75,36 +75,36 @@ def get_embeddings(
             binary_segmentations.data, binary_segmentations.sliding_window
         )
 
-    #def iter_waveform_and_mask():
-    #    for (chunk, masks), (_, clean_masks) in zip(
-    #        binary_segmentations, clean_segmentations
-    #    ):
-    #        # chunk: Segment(t, t + duration)
-    #        # masks: (num_frames, local_num_speakers) np.ndarray
+    def iter_waveform_and_mask():
+        for (chunk, masks), (_, clean_masks) in zip(
+            binary_segmentations, clean_segmentations
+        ):
+            # chunk: Segment(t, t + duration)
+            # masks: (num_frames, local_num_speakers) np.ndarray
 
-    #        waveform, _ = self._audio.crop(
-    #            file,
-    #            chunk,
-    #            duration=duration,
-    #            mode="pad",
-    #        )
-    #        # waveform: (1, num_samples) torch.Tensor
+            waveform, _ = self._audio.crop(
+                file,
+                chunk,
+                duration=duration,
+                mode="pad",
+            )
+            # waveform: (1, num_samples) torch.Tensor
 
-    #        # mask may contain NaN (in case of partial stitching)
-    #        masks = np.nan_to_num(masks, nan=0.0).astype(np.float32)
-    #        clean_masks = np.nan_to_num(clean_masks, nan=0.0).astype(np.float32)
+            # mask may contain NaN (in case of partial stitching)
+            masks = np.nan_to_num(masks, nan=0.0).astype(np.float32)
+            clean_masks = np.nan_to_num(clean_masks, nan=0.0).astype(np.float32)
 
-    #        for mask, clean_mask in zip(masks.T, clean_masks.T):
-    #            # mask: (num_frames, ) np.ndarray
+            for mask, clean_mask in zip(masks.T, clean_masks.T):
+                # mask: (num_frames, ) np.ndarray
 
-    #            if np.sum(clean_mask) > min_num_frames:
-    #                used_mask = clean_mask
-    #            else:
-    #                used_mask = mask
+                if np.sum(clean_mask) > min_num_frames:
+                    used_mask = clean_mask
+                else:
+                    used_mask = mask
 
-    #            yield waveform[None], torch.from_numpy(used_mask)[None]
-    #            # w: (1, 1, num_samples) torch.Tensor
-    #            # m: (1, num_frames) torch.Tensor
+                yield waveform[None], torch.from_numpy(used_mask)[None]
+                # w: (1, 1, num_samples) torch.Tensor
+                # m: (1, num_frames) torch.Tensor
 
     batches = batchify(
         iter_waveform_and_mask(),
