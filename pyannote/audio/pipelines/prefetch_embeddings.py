@@ -2,6 +2,7 @@
 
 import math
 import numpy as np
+import torch
 
 from pyannote.audio.pipelines.speaker_diarization import batchify
 from pyannote.core import SlidingWindowFeature
