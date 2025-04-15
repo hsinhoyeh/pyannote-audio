@@ -7,6 +7,7 @@ import torch
 
 from pyannote.audio.pipelines.speaker_diarization import batchify
 from pyannote.core import SlidingWindowFeature
+from einops import rearrange
 from typing import Callable, Optional
 
 logger = logging.getLogger(__name__)
